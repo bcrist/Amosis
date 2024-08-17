@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../microbe"
+		},
+		{
+			"path": "../microbe-rpi"
+		}
+	],
+	"settings": {}
+}

@@ -1,0 +1,16 @@
+.{
+    .name = "amosis-case",
+    .version = "0.0.0",
+    .minimum_zig_version = "0.13.0",
+    .paths = .{""},
+    .dependencies = .{
+        .microbe = .{
+            .url = "git+https://github.com/bcrist/microbe#054771d0a3b61abb54892e7ef63eb78beeba1deb",
+            .hash = "1220167c796d2371c4478ee7114655b17151e6ad1e336b3d921ef93a5919ba5d715d",
+        },
+        .@"microbe-rpi" = .{
+            .url = "git+https://github.com/bcrist/microbe-rpi#be4d2b5d6c0fa0234f42cbc435d9eeabb46619b8",
+            .hash = "1220ae62eebec445f6f4834c9346a25fe88e0788ae911a55431d21fb777911b4f8ad",
+        },
+    },
+}
