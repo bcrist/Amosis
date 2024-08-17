@@ -59,7 +59,7 @@ comptime {
     chip.init_exports();
 }
 
-export const _boot2_checksum: u32 linksection(".boot2_checksum") = 0x1878A027;
+export const _boot2_checksum: u32 linksection(".boot2_checksum") = 0x5950FD7C;
 
 const logic = @import("logic.zig");
 const usb = @import("usb.zig");

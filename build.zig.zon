@@ -5,12 +5,12 @@
     .paths = .{""},
     .dependencies = .{
         .microbe = .{
-            .url = "git+https://github.com/bcrist/microbe#054771d0a3b61abb54892e7ef63eb78beeba1deb",
-            .hash = "1220167c796d2371c4478ee7114655b17151e6ad1e336b3d921ef93a5919ba5d715d",
+            .url = "git+https://github.com/bcrist/microbe#df2c4becb06d114bfaf0b8231a122d882873ea87",
+            .hash = "1220ad88fc3e2f980610fbf0dc001305961cdd36f32782b23e4d3fbe68b3b3cf1771",
         },
         .@"microbe-rpi" = .{
-            .url = "git+https://github.com/bcrist/microbe-rpi#be4d2b5d6c0fa0234f42cbc435d9eeabb46619b8",
-            .hash = "1220ae62eebec445f6f4834c9346a25fe88e0788ae911a55431d21fb777911b4f8ad",
+            .url = "git+https://github.com/bcrist/microbe-rpi#4ad384c7d5b5230c75cbbc5a1ee58a490bc1ae79",
+            .hash = "1220f30c7f420ab5a898d6a105237e472f30787e05515e092907186cfeb086bd6b5a",
         },
     },
 }

@@ -31,7 +31,7 @@ pub fn set_led(location: Location, row: u8, color: RGB) void {
 }
 
 pub inline fn is_left() bool {
-    return comptime std.mem.eql(u8, @tagName(config.side), "left");
+    return true; // TODO
 }
 
 const matrix = @import("matrix.zig");
