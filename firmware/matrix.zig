@@ -1,99 +1,63 @@
 /// Handles scanning and debouncing of the key and status LED matrix using hardware PWM channels.
 /// `leds` can be updated at any time to change the color of the status LEDs.
-/// 
+///
 /// Layout: (RC)
 ///                   Left                           Right
-///               (02)(03)(04)                         (04)(03)(02)
-///  (00) (10)(11)(12)(13)(14) (43)               (43) (14)(13)(12)(11)(10) (00)
-///  (01) (20)(21)(22)(23)(24) (44)               (44) (24)(23)(22)(21)(20) (01)
-///       (30)(31)(32)(33)(34) (45)               (45) (34)(33)(32)(31)(30)
-///                         (42)(41)(40)     (40)(41)(42)
+///  (06)(05)(04)(03)(02)(01)                   (05)(04)(03)(02)(01)(00)
+///  (16)(15)(14)(13)(12)(11)                   (15)(14)(13)(12)(11)(10)
+///  (26)(25)(24)(23)(22)(21)                   (25)(24)(23)(22)(21)(20)
+///                     (00)(10)(20)     (26)(16)(06)
 
 // pwm clock = 1.5151 MHz
-// pwm frequency = 1.509 kHz
-// interrupt frequency = 3.018 kHz
-// full matrix refresh frequency = 251.5 Hz
+// interrupt frequency = 3.03 kHz
+// full matrix refresh frequency = 1.01 kHz
 const clock_divisor = 66;
-const max_count = 1010;
-const row_count = 1000;
+const max_count = 500;
 
 const key_press_debounce: u8 = 0;
 const key_press_cooldown: u8 = 6;
 const key_release_debounce: u8 = 3;
 const key_release_cooldown: u8 = 3;
 
-const Cols = microbe.bus.Bus(&.{
-    .GPIO8,
-    .GPIO9,
-    .GPIO10,
-    .GPIO11,
-    .GPIO12,
-    .GPIO13,
-}, .{
-    .gpio_config = .{
-        .maintenance = .pull_down,
-        .input_enabled = true,
-    },
-});
+const lhs = struct {
+    const Cols = microbe.bus.Bus(&.{ .GPIO12, .GPIO13, .GPIO14, .GPIO15, .GPIO16, .GPIO17, .GPIO18 }, .{
+        .gpio_config = .{
+            .maintenance = .pull_down,
+            .input_enabled = true,
+        },
+    });
 
-const Row_0 = chip.PWM(.{
-    .output = .GPIO14,
-    .clock = .{ .divisor_16ths = clock_divisor * 16 },
-    .max_count = max_count,
-});
-const Row_1 = chip.PWM(.{
-    .output = .GPIO15,
-    .clock = .{ .divisor_16ths = clock_divisor * 16 },
-    .max_count = max_count,
-});
-const Row_2 = chip.PWM(.{
-    .output = .GPIO16,
-    .clock = .{ .divisor_16ths = clock_divisor * 16 },
-    .max_count = max_count,
-});
-const Row_3 = chip.PWM(.{
-    .output = .GPIO17,
-    .clock = .{ .divisor_16ths = clock_divisor * 16 },
-    .max_count = max_count,
-});
-const Row_4 = chip.PWM(.{
-    .output = .GPIO18,
-    .clock = .{ .divisor_16ths = clock_divisor * 16 },
-    .max_count = max_count,
-});
-const Row_5 = chip.PWM(.{
-    .output = .GPIO19,
-    .clock = .{ .divisor_16ths = clock_divisor * 16 },
-    .max_count = max_count,
-});
+    const Rows = microbe.bus.Bus(&.{ .GPIO19, .GPIO20, .GPIO21 }, .{
+        .gpio_config = .{
+            .speed = .slow,
+            .strength = .@"2mA",
+        },
+    });
+};
+const rhs = struct {
+    const Cols = microbe.bus.Bus(&.{ .GPIO9, .GPIO10, .GPIO11, .GPIO12, .GPIO13, .GPIO14, .GPIO15 }, .{
+        .gpio_config = .{
+            .maintenance = .pull_down,
+            .input_enabled = true,
+        },
+    });
 
-const Blue_LED = chip.PWM(.{
-    .output = .GPIO20,
-    .polarity = .low_below_threshold,
-    .clock = .{ .divisor_16ths = clock_divisor * 16 },
-    .max_count = max_count,
-});
-const Red_LED = chip.PWM(.{
-    .output = .GPIO21,
-    .polarity = .low_below_threshold,
-    .clock = .{ .divisor_16ths = clock_divisor * 16 },
-    .max_count = max_count,
-});
-const Green_LED = chip.PWM(.{
-    .output = .GPIO22,
-    .polarity = .low_below_threshold,
-    .clock = .{ .divisor_16ths = clock_divisor * 16 },
-    .max_count = max_count,
-});
+    const Rows = microbe.bus.Bus(&.{ .GPIO16, .GPIO17, .GPIO18 }, .{
+        .gpio_config = .{
+            .speed = .slow,
+            .strength = .@"2mA",
+        },
+    });
+};
 
 const Sample_Interrupt = chip.PWM(.{
-    .channel = .ch4,
+    .channel = .ch7,
     .output = null,
     .clock = .{ .divisor_16ths = clock_divisor * 16 },
-    .max_count = @divExact(max_count, 2),
+    .max_count = max_count,
 });
 
-const Key_State = union (enum) {
+const Key_State = union(enum) {
     idle,
     debounce: u8,
     cooldown: u8,
@@ -126,60 +90,38 @@ const Key_State = union (enum) {
 };
 
 var current_row: u8 = 0;
-var row_idle: [6]bool = .{ false } ** 6;
-var key_state: [6][6]Key_State = .{ .{ .idle } ** 6 } ** 6;
-var prev_keys_pressed: [6]u6 = .{ 0 } ** 6;
-var keys_pressed: [6]u6 = .{ 0 } ** 6;
+var row_idle: [3]bool = .{false} ** 3;
+var key_state: [3][7]Key_State = .{.{.idle} ** 7} ** 3;
+var prev_keys_pressed: [3]u7 = .{0} ** 3;
+var keys_pressed: [3]u7 = .{0} ** 3;
 var keys_modified: bool = false;
 
-pub var leds: [6]RGB = .{ .{} } ** 6;
-
 pub fn init() void {
-    Cols.init();
-    Cols.set_output_enable(false);
+    if (Location.local == .left) {
+        lhs.Cols.init();
+        lhs.Cols.set_output_enable(false);
 
-    Row_0.init();
-    Row_1.init();
-    Row_2.init();
-    Row_3.init();
-    Row_4.init();
-    Row_5.init();
+        lhs.Rows.init();
+        lhs.Rows.set_output_enable(true);
+    } else {
+        rhs.Cols.init();
+        rhs.Cols.set_output_enable(false);
 
-    Row_0.set_threshold(0);
-    Row_1.set_threshold(0);
-    Row_2.set_threshold(0);
-    Row_3.set_threshold(0);
-    Row_4.set_threshold(0);
-    Row_5.set_threshold(0);
-
-    Blue_LED.init();
-    Red_LED.init();
-    Green_LED.init();
+        rhs.Rows.init();
+        rhs.Rows.set_output_enable(true);
+    }
 
     Sample_Interrupt.init();
 
     next_row();
 
-    chip.peripherals.PWM.irq.raw.clear_bits(.{ .ch4 = true });
-    chip.peripherals.PWM.irq.enable.modify(.{ .ch4 = true });
+    chip.peripherals.PWM.irq.raw.clear_bits(.{ .ch7 = true });
+    chip.peripherals.PWM.irq.enable.modify(.{ .ch7 = true });
 
     chip.peripherals.NVIC.interrupt_clear_pending.write(.{ .PWM_IRQ_WRAP = true });
     chip.peripherals.NVIC.interrupt_set_enable.write(.{ .PWM_IRQ_WRAP = true });
 
-    comptime var enable_mask: chip.reg_types.pwm.Channel_Bitmap = .{};
-    enable_mask.ch4 = true;
-    @field(enable_mask, @tagName(Row_0.channel)) = true;
-    @field(enable_mask, @tagName(Row_1.channel)) = true;
-    @field(enable_mask, @tagName(Row_2.channel)) = true;
-    @field(enable_mask, @tagName(Row_3.channel)) = true;
-    @field(enable_mask, @tagName(Row_4.channel)) = true;
-    @field(enable_mask, @tagName(Row_5.channel)) = true;
-
-    @field(enable_mask, @tagName(Blue_LED.channel)) = true;
-    @field(enable_mask, @tagName(Green_LED.channel)) = true;
-    @field(enable_mask, @tagName(Red_LED.channel)) = true;
-
-    chip.peripherals.PWM.enable.set_bits(enable_mask);
+    chip.peripherals.PWM.enable.set_bits(.{ .ch7 = true });
     log.info("initialized", .{});
 }
 
@@ -188,20 +130,20 @@ pub fn update() void {
         chip.peripherals.NVIC.interrupt_clear_enable.write(.{ .PWM_IRQ_WRAP = true });
         defer chip.peripherals.NVIC.interrupt_set_enable.write(.{ .PWM_IRQ_WRAP = true });
         link.send_keys(&keys_pressed);
-        logic.process_keys(Location.local, &prev_keys_pressed, u6, &keys_pressed);
+        logic.process_keys(Location.local, &prev_keys_pressed, u7, &keys_pressed);
         keys_modified = false;
     }
 }
 
 pub fn handle_interrupt() void {
-    chip.peripherals.PWM.irq.raw.clear_bits(.{ .ch4 = true });
-
-    const ch0_count = chip.peripherals.PWM.channel[@intFromEnum(Row_0.channel)].counter.read().count;
-    if (ch0_count + 1 < max_count / 2) return;
+    chip.peripherals.PWM.irq.raw.clear_bits(.{ .ch7 = true });
 
     const row = current_row;
     const raw_old_keys = keys_pressed[row];
-    const raw_new_keys = Cols.read();
+    const raw_new_keys = switch (Location.local) {
+        .left => lhs.Cols.read(),
+        .right => rhs.Cols.read(),
+    };
 
     defer next_row();
 
@@ -246,48 +188,23 @@ pub fn handle_interrupt() void {
 }
 
 fn next_row() void {
-    const new_row: u8 = if (current_row == 5) 0 else current_row + 1;
+    const new_row: u8 = if (current_row == 2) 0 else current_row + 1;
     current_row = new_row;
 
-    switch (new_row) {
-        0 => {
-            Row_5.set_threshold(0);
-            Row_0.set_threshold(row_count);
-        },
-        1 => {
-            Row_0.set_threshold(0);
-            Row_1.set_threshold(row_count);
-        },
-        2 => {
-            Row_1.set_threshold(0);
-            Row_2.set_threshold(row_count);
-        },
-        3 => {
-            Row_2.set_threshold(0);
-            Row_3.set_threshold(row_count);
-        },
-        4 => {
-            Row_3.set_threshold(0);
-            Row_4.set_threshold(row_count);
-        },
-        5 => {
-            Row_4.set_threshold(0);
-            Row_5.set_threshold(row_count);
-        },
-        else => unreachable,
-    }
+    var row_mask: u32 = 1;
+    row_mask <<= @intCast(new_row);
+    const row_mask_u3: u3 = @intCast(row_mask);
 
-    const rgb = leds[new_row];
-    Red_LED.set_threshold(rgb.r);
-    Green_LED.set_threshold(rgb.g);
-    Blue_LED.set_threshold(rgb.b);
+    switch (Location.local) {
+        .left => lhs.Rows.modify(row_mask_u3),
+        .right => rhs.Rows.modify(row_mask_u3),
+    }
 }
 
 const log = std.log.scoped(.matrix);
 
 const Location = util.Location;
 const Key_ID = util.Key_ID;
-const RGB = util.RGB;
 const util = @import("util.zig");
 const link = @import("link.zig");
 const logic = @import("logic.zig");

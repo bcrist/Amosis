@@ -2,8 +2,19 @@ pub const Location = enum {
     left,
     right,
 
-    pub const local: Location = if (is_left()) .left else .right;
-    pub const remote: Location = if (is_left()) .right else .left;
+    pub var local: Location = undefined;
+    pub var remote: Location = undefined;
+
+    pub fn set_local(location: Location) void {
+        log.info("Operating as {s} side", .{ @tagName(location) });
+        local = location;
+        remote = switch (location) {
+            .left => .right,
+            .right => .left,
+        };
+    }
+
+    const log = std.log.scoped(.Location);
 };
 
 pub const Key_ID = struct {
@@ -18,21 +29,7 @@ pub const Track = struct {
     z: u8 = 0,
 };
 
-pub const RGB = struct {
-    r: u16 = 0,
-    g: u16 = 0,
-    b: u16 = 0,
-};
 
-pub fn set_led(location: Location, row: u8, color: RGB) void {
-    if (location == Location.local) {
-        matrix.leds[row] = color;
-    }
-}
-
-pub inline fn is_left() bool {
-    return true; // TODO
-}
 
 const matrix = @import("matrix.zig");
 const config = @import("config");

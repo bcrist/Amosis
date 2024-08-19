@@ -1,4 +1,4 @@
-var keys_pressed: [6]u6 = .{ 0 } ** 6;
+var keys_pressed: [3]u7 = .{ 0 } ** 3;
 
 pub fn init() void {
     uart = @TypeOf(uart).init();
@@ -31,17 +31,14 @@ pub fn update() void {
 fn handle_command(command: u8) !bool {
     var r = uart.reader();
     switch (command) {
-        'K' => if (uart.get_rx_available_count() >= 7) {
+        'K' => if (uart.get_rx_available_count() >= 4) {
             _ = try r.readByte();
-            var buf: [6]u8 = undefined;
+            var buf: [3]u8 = undefined;
             _ = try r.readAll(&buf);
-            log.debug("received keys: {X:0>2} {X:0>2} {X:0>2} {X:0>2} {X:0>2} {X:0>2}", .{
+            log.debug("received keys: {X:0>2} {X:0>2} {X:0>2}", .{
                 buf[0],
                 buf[1],
                 buf[2],
-                buf[3],
-                buf[4],
-                buf[5],
             });
             logic.process_keys(Location.remote, &keys_pressed, u8, &buf);
             return true;
@@ -64,20 +61,17 @@ fn handle_command(command: u8) !bool {
     return false;
 }
 
-pub fn send_keys(keys: []u6) void {
+pub fn send_keys(keys: *const[3]u7) void {
     send_keys_internal(keys) catch |err| {
         log.err("Error sending keys: {s}", .{ @errorName(err) });
     };
 }
 
-fn send_keys_internal(keys: []u6) !void {
-    log.debug("sending keys: {X:0>2} {X:0>2} {X:0>2} {X:0>2} {X:0>2} {X:0>2}", .{
+fn send_keys_internal(keys: *const[3]u7) !void {
+    log.debug("sending keys: {X:0>2} {X:0>2} {X:0>2}", .{
         keys[0],
         keys[1],
         keys[2],
-        keys[3],
-        keys[4],
-        keys[5],
     });
     var w = uart.writer();
     try w.writeByte('K');

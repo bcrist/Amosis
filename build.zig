@@ -3,15 +3,18 @@ var generate_scad_exe: *std.Build.Step.Compile = undefined;
 
 pub fn build(b: *std.Build) void {
     builder = b;
-    generate_scad_exe = b.addExecutable(.{
-        .name = "generate_scad",
-        .root_source_file = b.path("case/generate_scad.zig"),
-        .target = b.host,
-        .optimize = .ReleaseFast,
-    });
+    const enable_stl = b.option(bool, "stl", "Enable/disable building openSCAD/STL files (enabled by default)") orelse true;
+    if (enable_stl) {
+        generate_scad_exe = b.addExecutable(.{
+            .name = "generate_scad",
+            .root_source_file = b.path("case/generate_scad.zig"),
+            .target = b.host,
+            .optimize = .ReleaseFast,
+        });
 
-    build_stl("left");
-    build_stl("right");
+        build_stl("left");
+        build_stl("right");
+    }
 
     const chip = rpi.rp2040(rpi.zd25q80c);
 

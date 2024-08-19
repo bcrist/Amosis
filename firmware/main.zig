@@ -1,7 +1,26 @@
+// On the LHS, GPIO9 connects to VCC through a small resistor and one of the red LEDs.
+// With the very low current sinked by the RP2040's pull-down, it should be above the 2V needed to reliably detect a high.
+// On the RHS, GPIO9 is COL0, so if GPIO16/17/18 (ROW0/1/2) are also low, it won't be pulled high, even if some switches are active.
+const Loc_Detect = microbe.Bus(&.{ .GPIO9, .GPIO16, .GPIO17, .GPIO18 }, .{ .gpio_config = .{
+    .hysteresis = false,
+    .maintenance = .pull_down,
+}});
+
 pub fn main() !void {
     debug_uart = @TypeOf(debug_uart).init();
     debug_uart.start();
 
+    {
+        Loc_Detect.init();
+        defer Loc_Detect.deinit();
+
+        Loc_Detect.set_output_enable(false);
+        microbe.Tick.delay(.{ .ms = 1 });
+        const gpio9: u1 = @truncate(Loc_Detect.read());
+        Location.set_local(if (gpio9 == 1) .left else .right);
+    }
+
+    leds.init();
     matrix.init();
     link.init();
     pinnacle.init();
@@ -16,6 +35,7 @@ pub fn main() !void {
         usb.update();
     }
 }
+
 
 pub const clocks: chip.clocks.Config = .{
     .xosc = .{},
@@ -59,12 +79,14 @@ comptime {
     chip.init_exports();
 }
 
-export const _boot2_checksum: u32 linksection(".boot2_checksum") = 0x5950FD7C;
+export const _boot2_checksum: u32 linksection(".boot2_checksum") = 0x1756F7BC;
 
+const Location = @import("util.zig").Location;
 const logic = @import("logic.zig");
 const usb = @import("usb.zig");
 const pinnacle = @import("pinnacle.zig");
 const matrix = @import("matrix.zig");
+const leds = @import("leds.zig");
 const link = @import("link.zig");
 const chip = @import("chip");
 const microbe = @import("microbe");

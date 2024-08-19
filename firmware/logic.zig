@@ -168,16 +168,16 @@ pub fn init() void {
 }
 
 pub fn update() void {
-    util.set_led(.left, 0, if (!layer.is_alpha()) navnum_color else .{});
-    util.set_led(.left, 1, if (layer.is_shifted()) shifted_color else .{});
-    util.set_led(.left, 2, if (ctrl) ctrl_color else .{});
-    util.set_led(.left, 3, if (alt) alt_color else .{});
-    util.set_led(.left, 4, if (gui) gui_color else .{});
-    util.set_led(.left, 5, if (rollover_error) rollover_error_color else .{});
+    leds.set_side(.left, if (!layer.is_alpha()) navnum_color else .{});
+    leds.set_side(.left, if (layer.is_shifted()) shifted_color else .{});
+    leds.set_side(.left, if (ctrl) ctrl_color else .{});
+    leds.set_side(.left, if (alt) alt_color else .{});
+    leds.set_side(.left, if (gui) gui_color else .{});
+    leds.set_side(.left, if (rollover_error) rollover_error_color else .{});
 
-    util.set_led(.right, 0, if (usb.keyboard_status.current_report.caps_lock) caps_lock_color else .{});
-    util.set_led(.right, 2, if (usb.keyboard_status.current_report.num_lock) num_lock_color else .{});
-    util.set_led(.right, 4, if (usb.keyboard_status.current_report.scroll_lock) scroll_lock_color else .{});
+    leds.set_side(.right, if (usb.keyboard_status.current_report.caps_lock) caps_lock_color else .{});
+    leds.set_side(.right, if (usb.keyboard_status.current_report.num_lock) num_lock_color else .{});
+    leds.set_side(.right, if (usb.keyboard_status.current_report.scroll_lock) scroll_lock_color else .{});
 }
 
 fn key_pressed(key: Key_ID) void {
@@ -383,11 +383,11 @@ fn push_keyboard_report() void {
     usb.keyboard_report.push(report);
 }
 
-pub fn process_keys(location: Location, old_keys_pressed: []u6, comptime T: type, new_keys_pressed: []const T) void {
+pub fn process_keys(location: Location, old_keys_pressed: *[3]u7, comptime T: type, new_keys_pressed: *const[3]T) void {
     for (0.., old_keys_pressed, new_keys_pressed) |row, *old_ptr, new| {
         const old = old_ptr.*;
         if (old == new) continue;
-        for (0..6) |col| {
+        for (0..7) |col| {
             const old_bit: u1 = @truncate(old >> @intCast(col));
             const new_bit: u1 = @truncate(new >> @intCast(col));
             if (old_bit == new_bit) continue;
@@ -519,7 +519,8 @@ fn average_right_track() Track {
 const log = std.log.scoped(.logic);
 
 const Mouse_Report = usb.default_configuration.mouse_interface.Report;
-const RGB = util.RGB;
+const RGB = leds.RGB;
+const leds = @import("leds.zig");
 const Location = util.Location;
 const Track = util.Track;
 const Key_ID = util.Key_ID;
