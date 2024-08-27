@@ -9,6 +9,8 @@ It does not have runtime-swappable layouts or configuration.  Instead, the keybo
 
 All of interesting configuration/layout stuff is handed in the [logic.zig](https://github.com/bcrist/Amosis/blob/main/firmware/logic.zig) file.  It should be relatively easy to customize the layout, though if you want to make behavioral changes, you will likely need to know some Zig.
 
+The default layout is based on [Hands Down Gold](https://sites.google.com/alanreiser.com/handsdown#h.j66p50cw2471).  The exact details can be found [here](https://docs.google.com/spreadsheets/d/1Owf2ERAmP1oHp472hNBu8RwOKwRJ6sjyrHRkhDTo6_Y/edit?usp=sharing).
+
 It would probably be possible to use something like QMK with Amosis controllers, but please don't ask me to help with that; I have no interest and little experience with QMK, ZMK, etc.
 
 ## Trackpad
@@ -40,5 +42,6 @@ The 7 column signals are read as inputs with weak pull-downs, and treat a high v
 Therefore, there are 2 possible ways to wire the diode/switch matrix that will work:
 * Diodes between the row signals and the switches, with a common anode for each row.
 * Diodes between the column signals and the switches, with a common cathode for each column.
+
 Note the line on diode packages indicates the cathode side.
 Also note while the schematics list a schottky diode part number, any general purpose diodes will work fine for the matrix, e.g. 1N914/1N4148, 1N4001, etc.

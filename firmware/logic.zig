@@ -11,7 +11,7 @@ const left_keymap: Keymap = .{
     .abc = .{
         .{ .{.layer=.track},                .{.raw=.kb_j},              .{.raw=.kb_g},                  .{.raw=.kb_m},                  .{.raw=.kb_p},                  .{.raw=.kb_v},              .{.raw=.kb_return},     },
         .{ .{.raw=.kb_q},                   .{.raw=.kb_r},              .{.raw=.kb_s},                  .{.raw=.kb_n},                  .{.raw=.kb_d},                  .{.raw=.kb_b},              .{.raw=.kb_t},          },
-        .{ .{.raw=.kb_z},                   .{.raw=.kb_x},              .{.raw=.kb_f},                  .{.raw=.kb_l},                  .{.raw=.kb_c},                  .{.raw=.kb_w},              .shift,                 },
+        .{ .{.raw=.kb_z},                   .{.raw=.kb_x},              .{.raw=.kb_f},                  .{.raw=.kb_l},                  .{.raw=.kb_c},                  .{.raw=.kb_w},              .ctrl,                  },
     },
     .num = .{
         .{ .{.layer=.track},                .{.raw=.kp_divide},         .{.unshifted=.kb_7_ampersand},  .{.unshifted=.kb_8_asterisk},   .{.unshifted=.kb_9_oparen},     .{.raw=.kp_minus},          .{.raw=.kp_enter},                 },
@@ -31,7 +31,7 @@ const left_keymap: Keymap = .{
     .qwerty = .{
         .{ .{.raw=.escape},                 .{.raw=.kb_q},              .{.raw=.kb_w},                  .{.raw=.kb_e},                  .{.raw=.kb_r},                  .{.raw=.kb_t},              .{.raw=.kb_return},     },
         .{ .{.raw=.tab},                    .{.raw=.kb_a},              .{.raw=.kb_s},                  .{.raw=.kb_d},                  .{.raw=.kb_f},                  .{.raw=.kb_g},              .alt,                   },
-        .{ .{.layer=.sym},                  .{.raw=.kb_z},              .{.raw=.kb_x},                  .{.raw=.kb_c},                  .{.raw=.kb_v},                  .{.raw=.kb_b},              .shift,                 },
+        .{ .{.layer=.sym},                  .{.raw=.kb_z},              .{.raw=.kb_x},                  .{.raw=.kb_c},                  .{.raw=.kb_v},                  .{.raw=.kb_b},              .ctrl,                  },
     },
     .game = .{
         .{ .{.raw=.escape},                 .{.raw=.backtick_tilde},    .{.raw=.kb_q},                  .{.raw=.kb_w},                  .{.raw=.kb_e},                  .{.raw=.kb_r},              .{.raw=.kb_3_octothorpe}, },
@@ -41,12 +41,12 @@ const left_keymap: Keymap = .{
     .track = .{
         .{  .{.layer=.track},               .track_lock,                .{.raw=.volume_down},           .{.raw=.mute},                  .{.raw=.volume_up},             .unused,                    .{.raw=.kb_return},     },
         .{  .unused,                        .unused,                    .{.consumer=.prev_track},       .{.consumer=.play_pause},       .{.consumer=.next_track},       .unused,                    .host_toggle,           },
-        .{  .mb4,                           .mb5,                       .mb6,                           .unused,                        .unused,                        .unused,                    .shift,                 },
+        .{  .mb4,                           .mb5,                       .mb6,                           .unused,                        .unused,                        .unused,                    .ctrl,                  },
     },
 };
 const right_keymap: Keymap = .{
     .abc = .{
-        .{ .ctrl,                           .{.raw=.tab},                       .{.layer=.sym},         .{.layer=.num},                 .{.raw=.home},                  .{.raw=.end},               .{.layer=.fx},          },
+        .{ .shift,                          .{.raw=.tab},                       .{.layer=.sym},         .{.layer=.num},                 .{.raw=.home},                  .{.raw=.end},               .{.layer=.fx},          },
         .{ .{.raw=.space},                  .alt,                               .{.raw=.kb_a},          .{.raw=.kb_e},                  .{.raw=.kb_i},                  .{.raw=.kb_h},              .{.raw=.backspace},     },
         .{ .{.shifted=.hyphen_underscore},  .{.unshifted=.period_greaterthan},  .{.raw=.kb_u},          .{.raw=.kb_o},                  .{.raw=.kb_y},                  .{.raw=.kb_k},              .{.raw=.delete},        },
     },
@@ -66,7 +66,7 @@ const right_keymap: Keymap = .{
         .{ .{.layer=.game},                 .track_lock,                .{.raw=.nav_left},              .{.raw=.nav_down},              .{.raw=.nav_right},             .unused,                    .unused,                },
     },
     .qwerty = .{
-        .{ .ctrl,                          .{.raw=.kb_y},               .{.raw=.kb_u},                  .{.raw=.kb_i},                  .{.raw=.kb_o},                  .{.raw=.kb_p},              .{.layer=.abc},         },
+        .{ .shift,                         .{.raw=.kb_y},               .{.raw=.kb_u},                  .{.raw=.kb_i},                  .{.raw=.kb_o},                  .{.raw=.kb_p},              .{.layer=.abc},         },
         .{ .{.raw=.space},                 .{.raw=.kb_h},               .{.raw=.kb_j},                  .{.raw=.kb_k},                  .{.raw=.kb_l},                  .{.raw=.semicolon_colon},   .{.raw=.squote_dquote}, },
         .{ .{.shifted=.hyphen_underscore}, .{.raw=.kb_n},               .{.raw=.kb_m},                  .{.raw=.comma_lessthan},        .{.raw=.period_greaterthan},    .{.raw=.slash_question},    .{.layer=.num},         },
     },
@@ -76,7 +76,7 @@ const right_keymap: Keymap = .{
         .{ .rmb,                            .{.raw=.kb_b},              .{.raw=.kb_n},                  .{.raw=.kb_m},                  .{.raw=.kb_t},                  .{.raw=.kb_i},              .{.raw=.kp_enter},      },
     },
     .track = .{
-        .{ .ctrl,                           .unused,                    .{.layer=.sym},                 .{.layer=.num},                 .unused,                        .unused,                    .{.layer=.fx},          },
+        .{ .shift,                          .unused,                    .{.layer=.sym},                 .{.layer=.num},                 .unused,                        .unused,                    .{.layer=.fx},          },
         .{ .{.raw=.space},                  .alt,                       .unused,                        .unused,                        .unused,                        .unused,                    .unused,                },
         .{ .{.shifted=.hyphen_underscore},  .unused,                    .unused,                        .unused,                        .lmb,                           .mmb,                       .rmb,                   },
     },
