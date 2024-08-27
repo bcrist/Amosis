@@ -1,12 +1,9 @@
 /// Handles scanning and debouncing of the key and status LED matrix using hardware PWM channels.
 /// `leds` can be updated at any time to change the color of the status LEDs.
-///
-/// Layout: (RC)
-///                   Left                           Right
-///  (06)(05)(04)(03)(02)(01)                   (05)(04)(03)(02)(01)(00)
-///  (16)(15)(14)(13)(12)(11)                   (15)(14)(13)(12)(11)(10)
-///  (26)(25)(24)(23)(22)(21)                   (25)(24)(23)(22)(21)(20)
-///                     (00)(10)(20)     (26)(16)(06)
+
+pub const col_count = 7;
+pub const row_count = 3;
+pub const Row_Bitmap = std.meta.Int(.unsigned, col_count);
 
 // pwm clock = 1.5151 MHz
 // interrupt frequency = 3.03 kHz
@@ -20,37 +17,53 @@ const key_release_debounce: u8 = 3;
 const key_release_cooldown: u8 = 3;
 
 const lhs = struct {
-    const Cols = microbe.bus.Bus(&.{ .GPIO12, .GPIO13, .GPIO14, .GPIO15, .GPIO16, .GPIO17, .GPIO18 }, .{
+    const Cols = microbe.bus.Bus(&.{ .GPIO18, .GPIO17, .GPIO16, .GPIO15, .GPIO14, .GPIO13, .GPIO12 }, .{
+        .name = "LHS Cols",
         .gpio_config = .{
             .maintenance = .pull_down,
             .input_enabled = true,
         },
     });
 
-    const Rows = microbe.bus.Bus(&.{ .GPIO19, .GPIO20, .GPIO21 }, .{
+    const Rows = microbe.bus.Bus(&.{ .GPIO21, .GPIO20, .GPIO19 }, .{
+        .name = "LHS Rows",
         .gpio_config = .{
             .speed = .slow,
             .strength = .@"2mA",
         },
     });
+
+    comptime {
+        std.debug.assert(Cols.State == Row_Bitmap);
+        std.debug.assert(@bitSizeOf(Rows.State) == row_count);
+    }
 };
+
 const rhs = struct {
-    const Cols = microbe.bus.Bus(&.{ .GPIO9, .GPIO10, .GPIO11, .GPIO12, .GPIO13, .GPIO14, .GPIO15 }, .{
+    const Cols = microbe.bus.Bus(&.{ .GPIO15, .GPIO14, .GPIO13, .GPIO12, .GPIO11, .GPIO10, .GPIO9 }, .{
+        .name = "RHS Cols",
         .gpio_config = .{
             .maintenance = .pull_down,
             .input_enabled = true,
         },
     });
 
-    const Rows = microbe.bus.Bus(&.{ .GPIO16, .GPIO17, .GPIO18 }, .{
+    const Rows = microbe.bus.Bus(&.{ .GPIO18, .GPIO17, .GPIO16 }, .{
+        .name = "RHS Rows",
         .gpio_config = .{
             .speed = .slow,
             .strength = .@"2mA",
         },
     });
+
+    comptime {
+        std.debug.assert(Cols.State == Row_Bitmap);
+        std.debug.assert(@bitSizeOf(Rows.State) == row_count);
+    }
 };
 
 const Sample_Interrupt = chip.PWM(.{
+    .name = "Matrix Sample Interrupt",
     .channel = .ch7,
     .output = null,
     .clock = .{ .divisor_16ths = clock_divisor * 16 },
@@ -73,10 +86,10 @@ const Key_State = union(enum) {
 
     pub fn start_cooldown(self: *Key_State, row: usize, col: usize, pressed: bool) void {
         if (pressed) {
-            keys_pressed[row] |= @as(u6, 1) << @intCast(col);
+            keys_pressed[row] |= @as(Row_Bitmap, 1) << @intCast(col);
             log.debug("R{} C{} down", .{ row, col });
         } else {
-            keys_pressed[row] &= ~(@as(u6, 1) << @intCast(col));
+            keys_pressed[row] &= ~(@as(Row_Bitmap, 1) << @intCast(col));
             log.debug("R{} C{} up", .{ row, col });
         }
         keys_modified = true;
@@ -90,10 +103,10 @@ const Key_State = union(enum) {
 };
 
 var current_row: u8 = 0;
-var row_idle: [3]bool = .{false} ** 3;
-var key_state: [3][7]Key_State = .{.{.idle} ** 7} ** 3;
-var prev_keys_pressed: [3]u7 = .{0} ** 3;
-var keys_pressed: [3]u7 = .{0} ** 3;
+var row_idle: [row_count]bool = .{false} ** row_count;
+var key_state: [row_count][col_count]Key_State = .{.{.idle} ** col_count} ** row_count;
+var prev_keys_pressed: [row_count]Row_Bitmap = .{0} ** row_count;
+var keys_pressed: [row_count]Row_Bitmap = .{0} ** row_count;
 var keys_modified: bool = false;
 
 pub fn init() void {
@@ -130,7 +143,7 @@ pub fn update() void {
         chip.peripherals.NVIC.interrupt_clear_enable.write(.{ .PWM_IRQ_WRAP = true });
         defer chip.peripherals.NVIC.interrupt_set_enable.write(.{ .PWM_IRQ_WRAP = true });
         link.send_keys(&keys_pressed);
-        logic.process_keys(Location.local, &prev_keys_pressed, u7, &keys_pressed);
+        logic.process_keys(Location.local, &prev_keys_pressed, Row_Bitmap, &keys_pressed);
         keys_modified = false;
     }
 }
@@ -139,8 +152,8 @@ pub fn handle_interrupt() void {
     chip.peripherals.PWM.irq.raw.clear_bits(.{ .ch7 = true });
 
     const row = current_row;
-    const raw_old_keys = keys_pressed[row];
-    const raw_new_keys = switch (Location.local) {
+    const raw_old_keys: Row_Bitmap = keys_pressed[row];
+    const raw_new_keys: Row_Bitmap = switch (Location.local) {
         .left => lhs.Cols.read(),
         .right => rhs.Cols.read(),
     };
@@ -151,6 +164,7 @@ pub fn handle_interrupt() void {
 
     var all_idle = true;
     for (0.., &key_state[row]) |col, *state| {
+        log.debug("checking col {}", .{ col });
         const old_bit: u1 = @truncate(raw_old_keys >> @intCast(col));
         const new_bit: u1 = @truncate(raw_new_keys >> @intCast(col));
         const old = old_bit == 1;
@@ -193,11 +207,10 @@ fn next_row() void {
 
     var row_mask: u32 = 1;
     row_mask <<= @intCast(new_row);
-    const row_mask_u3: u3 = @intCast(row_mask);
 
     switch (Location.local) {
-        .left => lhs.Rows.modify(row_mask_u3),
-        .right => rhs.Rows.modify(row_mask_u3),
+        .left => lhs.Rows.modify(@intCast(row_mask)),
+        .right => rhs.Rows.modify(@intCast(row_mask)),
     }
 }
 

@@ -1,4 +1,4 @@
-var keys_pressed: [3]u7 = .{ 0 } ** 3;
+var keys_pressed: [matrix.row_count]matrix.Row_Bitmap = .{ 0 } ** matrix.row_count;
 
 pub fn init() void {
     uart = @TypeOf(uart).init();
@@ -31,9 +31,9 @@ pub fn update() void {
 fn handle_command(command: u8) !bool {
     var r = uart.reader();
     switch (command) {
-        'K' => if (uart.get_rx_available_count() >= 4) {
+        'K' => if (uart.get_rx_available_count() >= matrix.row_count + 1) {
             _ = try r.readByte();
-            var buf: [3]u8 = undefined;
+            var buf: [matrix.row_count]u8 = undefined;
             _ = try r.readAll(&buf);
             log.debug("received keys: {X:0>2} {X:0>2} {X:0>2}", .{
                 buf[0],
@@ -42,15 +42,52 @@ fn handle_command(command: u8) !bool {
             });
             logic.process_keys(Location.remote, &keys_pressed, u8, &buf);
             return true;
+        } else {
+            log.debug("waiting for completion of keys command (have {} bytes)", .{ uart.get_rx_available_count() });
         },
         'T' => if (uart.get_rx_available_count() >= 6) {
             _ = try r.readByte();
             const z = try r.readByte();
             const x = try r.readInt(i16, .little);
             const y = try r.readInt(i16, .little);
-            log.debug("received track {}, {}: {}", .{ x, y, z });
-            logic.set_track(Location.remote, .{ .x = x, .y = y, .z = z });
+            const t: Track = .{ .x = x, .y = y, .z = z };
+            log.debug("received track {}", .{ t });
+            logic.set_track(Location.remote, t);
             return true;
+        } else {
+            log.debug("waiting for completion of track command (have {} bytes)", .{ uart.get_rx_available_count() });
+        },
+        'U' => {
+            _ = try r.readByte();
+            logic.on_usb_state_changed(Location.remote, true);
+        },
+        'u' => {
+            _ = try r.readByte();
+            logic.on_usb_state_changed(Location.remote, false);
+        },
+        'L' => {
+            _ = try r.readByte();
+            logic.on_received_caps_lock(true);
+        },
+        'l' => {
+            _ = try r.readByte();
+            logic.on_received_caps_lock(false);
+        },
+        'S' => {
+            _ = try r.readByte();
+            logic.on_received_scroll_lock(true);
+        },
+        's' => {
+            _ = try r.readByte();
+            logic.on_received_scroll_lock(false);
+        },
+        'N' => {
+            _ = try r.readByte();
+            logic.on_received_num_lock(true);
+        },
+        'n' => {
+            _ = try r.readByte();
+            logic.on_received_num_lock(false);
         },
         else => {
             _ = r.readByte() catch {};
@@ -61,17 +98,58 @@ fn handle_command(command: u8) !bool {
     return false;
 }
 
-pub fn send_keys(keys: *const[3]u7) void {
+pub fn send_caps_lock(active: bool) void {
+    log.info("sending caps lock: {} ({} tx bytes available)", .{
+        active,
+        uart.get_tx_available_count(),
+    });
+    uart.writer().writeByte(if (active) 'L' else 'l') catch |err| {
+        log.err("Error sending caps lock change: {s}", .{ @errorName(err) });
+    };
+}
+
+pub fn send_num_lock(active: bool) void {
+    log.info("sending num lock: {} ({} tx bytes available)", .{
+        active,
+        uart.get_tx_available_count(),
+    });
+    uart.writer().writeByte(if (active) 'N' else 'n') catch |err| {
+        log.err("Error sending num lock change: {s}", .{ @errorName(err) });
+    };
+}
+
+pub fn send_scroll_lock(active: bool) void {
+    log.info("sending scroll lock: {} ({} tx bytes available)", .{
+        active,
+        uart.get_tx_available_count(),
+    });
+    uart.writer().writeByte(if (active) 'S' else 's') catch |err| {
+        log.err("Error sending scroll lock change: {s}", .{ @errorName(err) });
+    };
+}
+
+pub fn send_usb_state_changed(active: bool) void {
+    log.info("sending usb state: {} ({} tx bytes available)", .{
+        active,
+        uart.get_tx_available_count(),
+    });
+    uart.writer().writeByte(if (active) 'U' else 'u') catch |err| {
+        log.err("Error sending usb state change: {s}", .{ @errorName(err) });
+    };
+}
+
+pub fn send_keys(keys: *const[matrix.row_count]matrix.Row_Bitmap) void {
     send_keys_internal(keys) catch |err| {
         log.err("Error sending keys: {s}", .{ @errorName(err) });
     };
 }
 
-fn send_keys_internal(keys: *const[3]u7) !void {
-    log.debug("sending keys: {X:0>2} {X:0>2} {X:0>2}", .{
+fn send_keys_internal(keys: *const[matrix.row_count]matrix.Row_Bitmap) !void {
+    log.debug("sending keys: {X:0>2} {X:0>2} {X:0>2} ({} tx bytes available)", .{
         keys[0],
         keys[1],
         keys[2],
+        uart.get_tx_available_count(),
     });
     var w = uart.writer();
     try w.writeByte('K');
@@ -87,7 +165,9 @@ pub fn send_track(t: Track) void {
 }
 
 fn send_track_internal(t: Track) !void {
-    log.debug("sending track {}, {}: {}", .{ t.x, t.y, t.z });
+    log.debug("sending track {} ({} tx bytes available)", .{
+        t, uart.get_tx_available_count(),
+    });
     var w = uart.writer();
     try w.writeByte('T');
     try w.writeByte(t.z);
@@ -107,6 +187,7 @@ const log = std.log.scoped(.link);
 
 const Location = util.Location;
 const Track = util.Track;
+const matrix = @import("matrix.zig");
 const util = @import("util.zig");
 const logic = @import("logic.zig");
 const chip = @import("chip");

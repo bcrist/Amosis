@@ -2028,7 +2028,7 @@
 			)
 			(symbol "LED_BGRA_0_0"
 				(text "G"
-					(at -1.905 -1.27 0)
+					(at -2.032 4.064 0)
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -2309,7 +2309,7 @@
 			)
 			(symbol "LED_BGRA_1_0"
 				(text "B"
-					(at -1.905 3.81 0)
+					(at -2.032 -1.27 0)
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -2317,7 +2317,7 @@
 					)
 				)
 				(text "R"
-					(at -1.905 -6.35 0)
+					(at -2.032 -6.35 0)
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -7263,7 +7263,7 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 195.58) (xy 186.69 195.58)
+			(xy 179.07 187.96) (xy 186.69 187.96)
 		)
 		(stroke
 			(width 0)
@@ -7453,7 +7453,7 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 200.66) (xy 186.69 200.66)
+			(xy 179.07 182.88) (xy 186.69 182.88)
 		)
 		(stroke
 			(width 0)
@@ -8323,7 +8323,7 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 182.88) (xy 186.69 182.88)
+			(xy 179.07 200.66) (xy 186.69 200.66)
 		)
 		(stroke
 			(width 0)
@@ -8823,7 +8823,7 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 198.12) (xy 186.69 198.12)
+			(xy 179.07 185.42) (xy 186.69 185.42)
 		)
 		(stroke
 			(width 0)
@@ -8883,7 +8883,7 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 185.42) (xy 186.69 185.42)
+			(xy 179.07 198.12) (xy 186.69 198.12)
 		)
 		(stroke
 			(width 0)
@@ -9963,7 +9963,7 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 187.96) (xy 186.69 187.96)
+			(xy 179.07 195.58) (xy 186.69 195.58)
 		)
 		(stroke
 			(width 0)
@@ -10013,7 +10013,7 @@
 		(uuid "03339abe-ea04-47fc-a03c-0f35cb9c2815")
 	)
 	(label "COL_{5}"
-		(at 186.69 198.12 180)
+		(at 186.69 185.42 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10046,7 +10046,7 @@
 		(uuid "2a929cac-9329-4132-9eb7-b8b45505ec31")
 	)
 	(label "COL_{4}"
-		(at 186.69 195.58 180)
+		(at 186.69 187.96 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10068,7 +10068,7 @@
 		(uuid "6861153d-6bbc-4b42-91e8-48c1750e2ec2")
 	)
 	(label "COL_{4}"
-		(at 255.27 91.44 180)
+		(at 255.27 86.36 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10079,7 +10079,7 @@
 		(uuid "687f305d-fdc9-4b45-8e5a-aebb2ed92f50")
 	)
 	(label "COL_{6}"
-		(at 255.27 96.52 180)
+		(at 255.27 81.28 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10090,7 +10090,7 @@
 		(uuid "70c487a0-53d7-4f7f-99d8-a8cfbd39e07f")
 	)
 	(label "COL_{0}"
-		(at 255.27 81.28 180)
+		(at 255.27 96.52 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10112,7 +10112,7 @@
 		(uuid "81699e57-119d-4754-8325-a4204f0b39ee")
 	)
 	(label "COL_{1}"
-		(at 255.27 83.82 180)
+		(at 255.27 93.98 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10156,7 +10156,7 @@
 		(uuid "88ea41c2-3c5d-46cd-ac3b-0970dea12e9c")
 	)
 	(label "COL_{1}"
-		(at 186.69 185.42 180)
+		(at 186.69 198.12 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10167,7 +10167,7 @@
 		(uuid "88f7f5db-f5cd-4501-a306-3fc2f48a7926")
 	)
 	(label "COL_{2}"
-		(at 255.27 86.36 180)
+		(at 255.27 91.44 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10189,7 +10189,7 @@
 		(uuid "9a1a98ab-b05b-4d1d-aa9a-98de8150f4c0")
 	)
 	(label "COL_{2}"
-		(at 186.69 187.96 180)
+		(at 186.69 195.58 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10200,7 +10200,7 @@
 		(uuid "9c1ff87f-52b9-42db-8cb6-d91a409f475d")
 	)
 	(label "COL_{5}"
-		(at 255.27 93.98 180)
+		(at 255.27 83.82 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10299,7 +10299,7 @@
 		(uuid "d900ab7e-322a-4687-8bdb-5adb47c699f7")
 	)
 	(label "COL_{6}"
-		(at 186.69 200.66 180)
+		(at 186.69 182.88 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -10310,7 +10310,7 @@
 		(uuid "df3994e5-adb8-48cf-a3ac-377b8f91e1e2")
 	)
 	(label "COL_{0}"
-		(at 186.69 182.88 180)
+		(at 186.69 200.66 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -13700,8 +13700,8 @@
 				)
 			)
 		)
-		(property "Value" "10"
-			(at 124.46 210.82 90)
+		(property "Value" "24.9"
+			(at 123.444 210.82 90)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -15630,8 +15630,8 @@
 				)
 			)
 		)
-		(property "Value" "120"
-			(at 123.698 177.8 90)
+		(property "Value" "49.9"
+			(at 123.444 177.8 90)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -17943,8 +17943,8 @@
 				)
 			)
 		)
-		(property "Value" "10"
-			(at 124.46 182.88 90)
+		(property "Value" "24.9"
+			(at 123.444 182.88 90)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -18084,7 +18084,8 @@
 	)
 	(symbol
 		(lib_id "amosis:Conn_01x01_Socket")
-		(at 173.99 182.88 180)
+		(at 173.99 200.66 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -18092,7 +18093,7 @@
 		(dnp no)
 		(uuid "7b5d6d31-9058-4ee5-b1f3-d91076e0fd25")
 		(property "Reference" "COL_{0}1"
-			(at 173.355 182.88 0)
+			(at 173.355 200.66 0)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -18102,7 +18103,7 @@
 			)
 		)
 		(property "Value" "COL_{0}"
-			(at 173.99 180.34 0)
+			(at 173.99 203.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18111,7 +18112,7 @@
 			)
 		)
 		(property "Footprint" "fp:PinHeader_1x01"
-			(at 173.99 182.88 0)
+			(at 173.99 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18120,7 +18121,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 173.99 182.88 0)
+			(at 173.99 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18129,7 +18130,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 173.99 182.88 0)
+			(at 173.99 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18244,7 +18245,8 @@
 	)
 	(symbol
 		(lib_id "amosis:Conn_01x01_Socket")
-		(at 173.99 185.42 180)
+		(at 173.99 198.12 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -18252,7 +18254,7 @@
 		(dnp no)
 		(uuid "7bfefbb7-8e65-4cfd-a049-c68f29ba83b5")
 		(property "Reference" "COL_{1}1"
-			(at 173.355 185.42 0)
+			(at 173.355 198.12 0)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -18262,7 +18264,7 @@
 			)
 		)
 		(property "Value" "COL_{1}"
-			(at 173.99 182.88 0)
+			(at 173.99 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18271,7 +18273,7 @@
 			)
 		)
 		(property "Footprint" "fp:PinHeader_1x01"
-			(at 173.99 185.42 0)
+			(at 173.99 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18280,7 +18282,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 173.99 185.42 0)
+			(at 173.99 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18289,7 +18291,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 173.99 185.42 0)
+			(at 173.99 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19058,8 +19060,8 @@
 				)
 			)
 		)
-		(property "Value" "120"
-			(at 123.698 205.74 90)
+		(property "Value" "49.9"
+			(at 123.444 205.74 90)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -19533,7 +19535,8 @@
 	)
 	(symbol
 		(lib_id "amosis:Conn_01x01_Socket")
-		(at 173.99 200.66 180)
+		(at 173.99 182.88 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -19541,7 +19544,7 @@
 		(dnp no)
 		(uuid "9407765c-fa82-478b-93d8-c5e0c2cec337")
 		(property "Reference" "COL_{6}1"
-			(at 173.355 200.66 0)
+			(at 173.355 182.88 0)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -19551,7 +19554,7 @@
 			)
 		)
 		(property "Value" "ROW_{0}"
-			(at 173.99 198.12 0)
+			(at 173.99 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19560,7 +19563,7 @@
 			)
 		)
 		(property "Footprint" "fp:PinHeader_1x01"
-			(at 173.99 200.66 0)
+			(at 173.99 182.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19569,7 +19572,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 173.99 200.66 0)
+			(at 173.99 182.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19578,7 +19581,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 173.99 200.66 0)
+			(at 173.99 182.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20012,7 +20015,8 @@
 	)
 	(symbol
 		(lib_id "amosis:Conn_01x01_Socket")
-		(at 173.99 198.12 180)
+		(at 173.99 185.42 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -20020,7 +20024,7 @@
 		(dnp no)
 		(uuid "9a79e962-fe3d-4bf0-904a-152e18122957")
 		(property "Reference" "COL_{5}1"
-			(at 173.355 198.12 0)
+			(at 173.355 185.42 0)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -20030,7 +20034,7 @@
 			)
 		)
 		(property "Value" "COL_{5}"
-			(at 173.99 195.58 0)
+			(at 173.99 187.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20039,7 +20043,7 @@
 			)
 		)
 		(property "Footprint" "fp:PinHeader_1x01"
-			(at 173.99 198.12 0)
+			(at 173.99 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20048,7 +20052,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 173.99 198.12 0)
+			(at 173.99 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20057,7 +20061,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 173.99 198.12 0)
+			(at 173.99 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20733,7 +20737,8 @@
 	)
 	(symbol
 		(lib_id "amosis:Conn_01x01_Socket")
-		(at 173.99 195.58 180)
+		(at 173.99 187.96 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -20741,7 +20746,7 @@
 		(dnp no)
 		(uuid "a44e0694-d8da-4f11-b2a6-b4c8e7c40aeb")
 		(property "Reference" "COL_{4}1"
-			(at 173.355 195.58 0)
+			(at 173.355 187.96 0)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -20751,7 +20756,7 @@
 			)
 		)
 		(property "Value" "COL_{4}"
-			(at 173.99 193.04 0)
+			(at 173.99 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20760,7 +20765,7 @@
 			)
 		)
 		(property "Footprint" "fp:PinHeader_1x01"
-			(at 173.99 195.58 0)
+			(at 173.99 187.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20769,7 +20774,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 173.99 195.58 0)
+			(at 173.99 187.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20778,7 +20783,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 173.99 195.58 0)
+			(at 173.99 187.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21597,7 +21602,8 @@
 	)
 	(symbol
 		(lib_id "amosis:Conn_01x01_Socket")
-		(at 173.99 187.96 180)
+		(at 173.99 195.58 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -21605,7 +21611,7 @@
 		(dnp no)
 		(uuid "b59f0bbc-49c2-4a33-a0ec-0df641bc3f39")
 		(property "Reference" "COL_{2}1"
-			(at 173.355 187.96 0)
+			(at 173.355 195.58 0)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -21615,7 +21621,7 @@
 			)
 		)
 		(property "Value" "COL_{2}"
-			(at 173.99 185.42 0)
+			(at 173.99 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21624,7 +21630,7 @@
 			)
 		)
 		(property "Footprint" "fp:PinHeader_1x01"
-			(at 173.99 187.96 0)
+			(at 173.99 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21633,7 +21639,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 173.99 187.96 0)
+			(at 173.99 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21642,7 +21648,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 173.99 187.96 0)
+			(at 173.99 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22142,7 +22148,8 @@
 	)
 	(symbol
 		(lib_id "amosis:Conn_01x01_Socket")
-		(at 173.99 190.5 180)
+		(at 173.99 190.5 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -22160,7 +22167,7 @@
 			)
 		)
 		(property "Value" "COL_{3}"
-			(at 173.99 187.96 0)
+			(at 173.99 193.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -25350,7 +25357,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "CESD5V0D5"
+		(property "Value" "DESD5V0U1BA"
 			(at 85.725 167.64 0)
 			(do_not_autoplace yes)
 			(effects
@@ -25432,7 +25439,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "CESD5V0D5"
+		(property "Value" "DESD5V0U1BA"
 			(at 100.965 167.64 0)
 			(do_not_autoplace yes)
 			(effects

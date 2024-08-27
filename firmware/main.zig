@@ -1,3 +1,6 @@
+// TODO prevent hang if keyboard fifo fills up
+// TODO logic: don't allow changing host if there is only one host
+
 // On the LHS, GPIO9 connects to VCC through a small resistor and one of the red LEDs.
 // With the very low current sinked by the RP2040's pull-down, it should be above the 2V needed to reliably detect a high.
 // On the RHS, GPIO9 is COL0, so if GPIO16/17/18 (ROW0/1/2) are also low, it won't be pulled high, even if some switches are active.
@@ -9,6 +12,8 @@ const Loc_Detect = microbe.Bus(&.{ .GPIO9, .GPIO16, .GPIO17, .GPIO18 }, .{ .gpio
 pub fn main() !void {
     debug_uart = @TypeOf(debug_uart).init();
     debug_uart.start();
+
+    std.log.scoped(.main).info("Starting up...", .{});
 
     {
         Loc_Detect.init();
@@ -66,20 +71,15 @@ pub var debug_uart: chip.UART(.{
 pub const panic = microbe.default_panic;
 pub const std_options: std.Options = .{
     .logFn = microbe.default_log,
-    .log_level = std.log.Level.info,
-    .log_scope_levels = &.{
-        .{ .scope = .usb, .level = .info },
-        .{ .scope = .hid, .level = .info },
-        .{ .scope = .pinnacle, .level = .info },
-        .{ .scope = .matrix, .level = .info },
-    },
+    .log_level = std.log.Level.warn,
+    .log_scope_levels = &.{},
 };
 
 comptime {
     chip.init_exports();
 }
 
-export const _boot2_checksum: u32 linksection(".boot2_checksum") = 0x1756F7BC;
+export const _boot2_checksum: u32 linksection(".boot2_checksum") = 0xBB0A8C4F;
 
 const Location = @import("util.zig").Location;
 const logic = @import("logic.zig");

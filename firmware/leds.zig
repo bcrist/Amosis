@@ -19,13 +19,13 @@ const lhs = struct {
         .max_count = max_count,
     });
     const Green_LED_Top = chip.PWM(.{
-        .output = .GPIO7, // ch3b
+        .output = .GPIO8, // ch4a
         .polarity = .low_below_threshold,
         .clock = .{ .divisor_16ths = clock_divisor * 16 },
         .max_count = max_count,
     });
     const Blue_LED_Top = chip.PWM(.{
-        .output = .GPIO8, // ch4a
+        .output = .GPIO7, // ch3b
         .polarity = .low_below_threshold,
         .clock = .{ .divisor_16ths = clock_divisor * 16 },
         .max_count = max_count,
@@ -38,13 +38,13 @@ const lhs = struct {
         .max_count = max_count,
     });
     const Green_LED_Side = chip.PWM(.{
-        .output = .GPIO10, // ch5a
+        .output = .GPIO11, // ch5b
         .polarity = .low_below_threshold,
         .clock = .{ .divisor_16ths = clock_divisor * 16 },
         .max_count = max_count,
     });
     const Blue_LED_Side = chip.PWM(.{
-        .output = .GPIO11, // ch5b
+        .output = .GPIO10, // ch5a
         .polarity = .low_below_threshold,
         .clock = .{ .divisor_16ths = clock_divisor * 16 },
         .max_count = max_count,
@@ -59,13 +59,13 @@ const rhs = struct {
         .max_count = max_count,
     });
     const Green_LED_Top = chip.PWM(.{
-        .output = .GPIO7, // ch3b
+        .output = .GPIO8, // ch4a
         .polarity = .low_below_threshold,
         .clock = .{ .divisor_16ths = clock_divisor * 16 },
         .max_count = max_count,
     });
     const Blue_LED_Top = chip.PWM(.{
-        .output = .GPIO8, // ch4a
+        .output = .GPIO7, // ch3b
         .polarity = .low_below_threshold,
         .clock = .{ .divisor_16ths = clock_divisor * 16 },
         .max_count = max_count,
@@ -78,13 +78,13 @@ const rhs = struct {
         .max_count = max_count,
     });
     const Green_LED_Side = chip.PWM(.{
-        .output = .GPIO20, // ch2a
+        .output = .GPIO21, // ch2b
         .polarity = .low_below_threshold,
         .clock = .{ .divisor_16ths = clock_divisor * 16 },
         .max_count = max_count,
     });
     const Blue_LED_Side = chip.PWM(.{
-        .output = .GPIO21, // ch2b
+        .output = .GPIO20, // ch2a
         .polarity = .low_below_threshold,
         .clock = .{ .divisor_16ths = clock_divisor * 16 },
         .max_count = max_count,

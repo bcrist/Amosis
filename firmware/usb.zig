@@ -333,6 +333,17 @@ pub fn handle_bus_reset() void {
 /// Called when a set_configuration setup request is processed
 pub fn handle_configuration_changed(configuration: u8) void {
     _ = configuration;
+    logic.on_usb_state_changed(Location.local, true);
+    link.send_usb_state_changed(true);
+}
+
+/// Called when the USB connection state changes
+pub fn handle_state_changed(state: usb.State) void {
+    log.info("{}", .{ state });
+    if (state != .connected) {
+        logic.on_usb_state_changed(Location.local, false);
+        link.send_usb_state_changed(false);
+    }
 }
 
 /// Used to respond to the get_status setup request
@@ -456,6 +467,9 @@ const descriptor = usb.descriptor;
 const endpoint = usb.endpoint;
 const classes = usb.classes;
 const Setup_Packet = usb.Setup_Packet;
+const Location = util.Location;
+const util = @import("util.zig");
+const link = @import("link.zig");
 const logic = @import("logic.zig");
 const usb = @import("microbe").usb;
 const std = @import("std");

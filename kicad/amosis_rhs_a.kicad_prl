@@ -1,6 +1,6 @@
 {
   "board": {
-    "active_layer": 39,
+    "active_layer": 0,
     "active_layer_preset": "",
     "auto_track_width": true,
     "hidden_netclasses": [],
@@ -14,7 +14,6 @@
       "vias": 1.0,
       "zones": 0.6
     },
-    "ratsnest_display_mode": 0,
     "selection_filter": {
       "dimensions": true,
       "footprints": true,
@@ -22,7 +21,7 @@
       "keepouts": true,
       "lockedItems": false,
       "otherItems": true,
-      "pads": false,
+      "pads": true,
       "text": true,
       "tracks": true,
       "vias": true,
@@ -64,7 +63,7 @@
       39,
       40
     ],
-    "visible_layers": "fff3dff_ffffffff",
+    "visible_layers": "fffffff_ffffffff",
     "zone_display_mode": 0
   },
   "git": {
@@ -74,7 +73,7 @@
     "ssh_key": ""
   },
   "meta": {
-    "filename": "amosis.kicad_prl",
+    "filename": "amosis_rhs_a.kicad_prl",
     "version": 3
   },
   "project": {

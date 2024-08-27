@@ -10,5 +10,7 @@
 			"path": "../microbe-rpi"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"cortex-debug.variableUseNaturalFormat": false
+	}
 }

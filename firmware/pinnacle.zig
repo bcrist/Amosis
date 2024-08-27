@@ -67,7 +67,7 @@ pub fn update() void {
         track.y -= 768;
         track.y = std.math.clamp(track.y, -750, 750);
 
-        log.debug("X: {}\tY: {}\tZ: {}", .{ track.x, track.y, track.z });
+        log.debug("{}", .{ track });
         link.send_track(track);
         logic.set_track(Location.local, track);
         return;

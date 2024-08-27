@@ -21,6 +21,7 @@ pub fn build(b: *std.Build) void {
     const boot2_object = rpi.add_boot2_object(b, .{
         .source = .{ .module = b.dependency("microbe-rpi", .{}).module("boot2-default") },
         .chip = chip,
+        .optimize = .ReleaseSmall,
     });
 
     const exe = microbe.add_executable(b, .{
@@ -29,6 +30,7 @@ pub fn build(b: *std.Build) void {
         .chip = chip,
         .sections = rpi.default_rp2040_sections(),
         .optimize = b.standardOptimizeOption(.{ .preferred_optimize_mode = .ReleaseSmall }),
+        .breakpoint_on_panic = false,
     });
     exe.addObject(boot2_object);
 
@@ -43,6 +45,7 @@ pub fn build(b: *std.Build) void {
         .{
             .path = checksummed_bin,
             .family = .rp2040,
+            .base_address = 0x10000000
         },
     });
     const install_uf2 = b.addInstallBinFile(uf2, "firmware.uf2");
