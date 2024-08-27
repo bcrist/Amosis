@@ -425,20 +425,20 @@ fn key_released(key: Key_ID) void {
         },
         
         .host_left => {
-            enabled_location = .left;
+            if (left_available) enabled_location = .left;
             clear_transient(now);
         },
         .host_right => {
-            enabled_location = .right;
+            if (right_available) enabled_location = .right;
             clear_transient(now);
         },
         .host_toggle => {
-            if (enabled_location) |loc| {
+            if (left_available and right_available) if (enabled_location) |loc| {
                 enabled_location = switch (loc) {
                     .left => .right,
                     .right => .left,
                 };
-            }
+            };
             clear_transient(now);
         },
 
