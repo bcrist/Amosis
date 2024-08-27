@@ -3,7 +3,13 @@
 The Amosis is a 40% split keywell board with a Cirque trackpad built into each side.  The case is 3D printed, and features a keywell shape similar to Kinesis or Dactyl keyboards, except with only three rows.
 
 ## Controller
-This keyboard uses custom controller firmware written from scratch in Zig, and running on an RP2040.  If you want to use QMK, etc, you are welcome to try, but please don't ask me to do it for you; I have no interest in that.
+This keyboard uses custom controller firmware written from scratch in Zig, and running on an RP2040.
+
+It does not have runtime-swappable layouts or configuration.  Instead, the keyboard layout, layer switching logic, mouse sensitivity, etc. is baked into the firmware, but updating the firmware is just a matter of holding the BOOT button while pressing the RESET button, then dragging a UF2 file to the RPI USB drive.
+
+All of interesting configuration/layout stuff is handed in the [logic.zig](https://github.com/bcrist/Amosis/blob/main/firmware/logic.zig) file.  It should be relatively easy to customize the layout, though if you want to make behavioral changes, you will likely need to know some Zig.
+
+It would probably be possible to use something like QMK with Amosis controllers, but please don't ask me to help with that; I have no interest and little experience with QMK, ZMK, etc.
 
 ## Trackpad
 Each side of the keyboard integrates a 40mm Cirque GlidePoint trackpad from a Steam Controller.  While Valve stopped producing Steam Controllers years ago, you can still purchase the trackpads from [Mouser](https://www.mouser.com/c/?marcom=118816186), but you will likely need to make some modifications to make this work:
@@ -26,6 +32,13 @@ Adjust the keymapping and layer logic as you like, then run `zig build`.
 
 3D print a case using `zig-out/bin/left.stl` and `zig-out/bin/right.stl`.
 
-Flash the `zig-out/bin/firmware_left.uf2` and `zig-out/bin/firmware_right.uf2` to the corresponding controllers.
+Flash the `zig-out/bin/firmware.uf2` and to both controllers (the same file can be used for both sides because the firmware will detect which side it is at boot).
 
-Place switches and wire up the diode matrix such that each column signal connects to the cathode of a diode, and each row signal connects directly to one of the switch contacts.
+### Wiring
+The 3 row signals are driven to 3.3V when scanning a row, and 0V when not scanning that row.
+The 7 column signals are read as inputs with weak pull-downs, and treat a high value as indicating that a switch is pressed.
+Therefore, there are 2 possible ways to wire the diode/switch matrix that will work:
+* Diodes between the row signals and the switches, with a common anode for each row.
+* Diodes between the column signals and the switches, with a common cathode for each column.
+Note the line on diode packages indicates the cathode side.
+Also note while the schematics list a schottky diode part number, any general purpose diodes will work fine for the matrix, e.g. 1N914/1N4148, 1N4001, etc.
