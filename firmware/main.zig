@@ -1,6 +1,6 @@
-// TODO prevent hang if keyboard fifo fills up
 // TODO mouse scrolling - when trackpad down event occurs near the edges?
 // TODO haptic feedback for mouse scrolling
+// TODO HID consumer page controls (need to either give up boot kbd, mouse, or add a 3rd separate HID interface)
 
 // On the LHS, GPIO9 connects to VCC through a small resistor and one of the red LEDs.
 // With the very low current sinked by the RP2040's pull-down, it should be above the 2V needed to reliably detect a high.
